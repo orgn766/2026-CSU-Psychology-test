@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大学生异地恋依恋类型自测</title>
+<style>
+:root{--bg:#0f1117;--card:#1a1d27;--border:#2a2d3a;--text:#e0e0e0;--muted:#888;--blue:#4a90d9;--yel:#e6b422;--orange:#e87d3e;--red:#e05151;--green:#4caf84;--h:222;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,'Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:820px;margin:0 auto;padding:24px 16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px;margin-bottom:20px}
+h1{font-size:24px;color:#fff;margin-bottom:6px}
+h2{font-size:18px;color:var(--blue);margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:10px}
+h3{font-size:15px;color:var(--yel);margin:20px 0 10px}
+.sub{color:var(--muted);font-size:13px;margin-bottom:20px}
+
+.question{margin-bottom:18px;padding:14px;background:#151820;border-radius:8px}
+.q-num{font-size:11px;color:var(--muted);margin-bottom:4px}
+.q-text{font-size:14px;margin-bottom:10px;color:#fff}
+.options{display:flex;gap:10px;flex-wrap:wrap}
+.opt{flex:1;min-width:55px;text-align:center;padding:8px 4px;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:13px;transition:.15s;color:var(--muted);user-select:none}
+.opt:hover{border-color:var(--blue);color:#fff}
+.opt.sel{border-color:var(--blue);background:#1a2740;color:var(--blue);font-weight:700}
+
+.btn{display:block;width:100%;padding:14px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;margin-top:16px;font-weight:700;transition:.15s}
+.btn:hover{opacity:.9}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+.result{display:none}
+.result.show{display:block}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.metric{background:#151820;border-radius:8px;padding:16px;text-align:center}
+.metric .label{font-size:12px;color:var(--muted);margin-bottom:4px}
+.metric .value{font-size:32px;font-weight:800}
+.metric .norm{font-size:11px;color:var(--muted);margin-top:4px}
+.metric .norm span{font-weight:700}
+
+.badge{display:inline-block;padding:6px 14px;border-radius:20px;font-size:14px;font-weight:700;margin:4px}
+.badge.fearful{background:#4a1a1a;color:var(--red)}
+.badge.anxious{background:#3a2a10;color:var(--orange)}
+.badge.secure{background:#1a3a2a;color:var(--green)}
+.badge.avoidant{background:#1a2a3a;color:var(--blue)}
+
+canvas{width:100%;max-width:500px;display:block;margin:0 auto;border-radius:8px}
+
+.interpret p{margin-bottom:12px;font-size:14px}
+.interpret .signal{background:#2a1515;border-left:3px solid var(--red);padding:8px 14px;margin:8px 0;font-size:13px}
+.interpret .positive{background:#152a1a;border-left:3px solid var(--green);padding:8px 14px;margin:8px 0;font-size:13px}
+.interpret .warn{background:#2a2515;border-left:3px solid var(--orange);padding:8px 14px;margin:8px 0;font-size:13px}
+
+.tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.tab{padding:8px 16px;border-radius:6px;cursor:pointer;font-size:13px;border:1px solid var(--border);color:var(--muted);transition:.15s}
+.tab.act{background:var(--blue);border-color:var(--blue);color:#fff}
+.tab-content{display:none}
+.tab-content.act{display:block}
+
+.small-table{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0}
+.small-table td,.small-table th{padding:6px 8px;border:1px solid var(--border);text-align:center}
+.small-table th{background:#151820;color:var(--muted);font-weight:500}
+
+.highlight{color:var(--yel);font-weight:700}
+.danger{color:var(--red);font-weight:700}
+.good{color:var(--green);font-weight:700}
+
+.pg-bar{height:18px;border-radius:9px;background:#2a2d3a;overflow:hidden;margin:6px 0}
+.pg-fill{height:100%;border-radius:9px;transition:width .8s}
+
+.flag{padding:6px 10px;border-radius:4px;font-size:11px;margin:3px;display:inline-block}
+.flag.r{background:#2a1515;color:var(--red)}
+.flag.g{background:#152a2a;color:var(--green)}
+.flag.y{background:#2a2515;color:var(--orange)}
+
+@media(max-width:600px){.grid2{grid-template-columns:1fr}.opt{min-width:40px;font-size:11px}}
+</style>
+</head>
+<body>
+<div class="container" id="app">
+
+<!-- ===== TEST SECTION ===== -->
+<div id="testSection">
+  <div class="card">
+    <h1>大学生异地恋依恋类型自测</h1>
+    <p class="sub">共 31 题 · 约 6 分钟 · 基于彭小凡(2020) ECR-RS 中文版 + 杨舒程(2019) PPRS · 数据仅本地处理</p>
+  </div>
+
+  <!-- Part 1: Demographics -->
+  <div class="card" id="part1">
+    <h2>第一部分：基本信息</h2>
+    <div class="question"><div class="q-text">1. 你目前是否处于恋爱关系中？</div>
+      <div class="options"><div class="opt" data-q="1" data-v="1">是，异地恋</div><div class="opt" data-q="1" data-v="2">是，同城恋</div><div class="opt" data-q="1" data-v="3">否，单身</div></div></div>
+    <div class="question"><div class="q-text">2. 你的性别</div>
+      <div class="options"><div class="opt" data-q="2" data-v="1">男</div><div class="opt" data-q="2" data-v="2">女</div></div></div>
+    <div class="question"><div class="q-text">3. 你的年级</div>
+      <div class="options"><div class="opt" data-q="3" data-v="1">大一</div><div class="opt" data-q="3" data-v="2">大二</div><div class="opt" data-q="3" data-v="3">大三</div><div class="opt" data-q="3" data-v="4">大四</div></div></div>
+    <div class="question"><div class="q-text">4. 与伴侣的恋爱时长</div>
+      <div class="options"><div class="opt" data-q="4" data-v="1">6月以内</div><div class="opt" data-q="4" data-v="2">6月~1年</div><div class="opt" data-q="4" data-v="3">1~2年</div><div class="opt" data-q="4" data-v="4">2年以上</div></div></div>
+    <div class="question"><div class="q-text">5. 平均见面频率（异地恋填 1-4，同城恋选 5）</div>
+      <div class="options"><div class="opt" data-q="5" data-v="1">每周</div><div class="opt" data-q="5" data-v="2">每月</div><div class="opt" data-q="5" data-v="3">每学期</div><div class="opt" data-q="5" data-v="4">每年</div><div class="opt" data-q="5" data-v="5">同城</div></div></div>
+  </div>
+
+  <!-- Part 2: Scale Items -->
+  <div class="card" id="part2">
+    <h2>第二部分：恋爱关系体验</h2>
+    <p class="sub">请根据你与伴侣相处的真实感受选择。1 = 完全不符合，5 = 完全符合。<br>标注 <span style="color:var(--orange)">[R]</span> 为反向计分题。</p>
+  </div>
+</div><!-- /testSection -->
+
+<!-- ===== RESULT SECTION ===== -->
+<div id="resultSection" class="result">
+  <div class="card">
+    <h1 style="text-align:center">你的依恋类型分析报告</h1>
+    <p class="sub" style="text-align:center" id="resultDate"></p>
+  </div>
+
+  <!-- Metrics -->
+  <div class="card">
+    <h2>核心维度得分</h2>
+    <div class="grid2" id="metricsGrid"></div>
+  </div>
+
+  <!-- Classification -->
+  <div class="card">
+    <h2>依恋类型判定</h2>
+    <div id="classificationResult"></div>
+  </div>
+
+  <!-- Quadrant -->
+  <div class="card" style="text-align:center">
+    <h2>四象限定位</h2>
+    <canvas id="quadrant" width="460" height="460"></canvas>
+    <p class="sub">横轴=回避，纵轴=焦虑。白点=你的位置。虚线=分类临界线(中点法)。</p>
+  </div>
+
+  <!-- Tabs for detailed analysis -->
+  <div class="card">
+    <div class="tabs">
+      <div class="tab act" data-tab="tab-depth">逐维度分析</div>
+      <div class="tab" data-tab="tab-model">调节中介模型</div>
+      <div class="tab" data-tab="tab-items">逐题详情</div>
+      <div class="tab" data-tab="tab-advice">分层建议</div>
+    </div>
+    <div class="tab-content act" id="tab-depth"></div>
+    <div class="tab-content" id="tab-model"></div>
+    <div class="tab-content" id="tab-items"></div>
+    <div class="tab-content" id="tab-advice"></div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ===== DATA =====
+const studyNorms = {
+  pprs:{m:3.35,sd:0.83},
+  dts:{m:3.08,sd:0.82},
+  ras:{m:3.11,sd:0.63},
+  anx:{m:3.10,sd:1.12},
+  avo:{m:3.14,sd:1.07},
+  uls:{m:2.96,sd:0.95}
+};
+
+const groupNorms = {
+  secure:{pprs:3.60,dts:3.80,ras:3.52,anx:2.01,avo:2.05,uls:2.18},
+  anxious:{pprs:4.13,dts:3.06,ras:3.26,anx:4.19,avo:2.56,uls:2.85},
+  avoidant:{pprs:2.49,dts:2.66,ras:2.69,anx:2.47,avo:4.07,uls:3.22},
+  fearful:{pprs:3.21,dts:2.72,ras:2.92,anx:4.01,avo:3.98,uls:3.69}
+};
+
+// Scale item definitions: [qNum, scale, isReversed, label]
+const scaleItems = [
+  {q:6, scale:'avo', rev:true,  text:'在需要的时候，向伴侣求助是有帮助的 [R]'},
+  {q:7, scale:'pprs',rev:false, text:'我的伴侣会真正听我倾诉'},
+  {q:8, scale:'anx', rev:false, text:'我经常担心伴侣并不是真的在乎我'},
+  {q:9, scale:'dts', rev:false, text:'我觉得我可以完全信任我的伴侣'},
+  {q:10,scale:'uls', rev:false, text:'我缺少可以依靠的伙伴'},
+  {q:11,scale:'pprs',rev:false, text:'我的伴侣理解我'},
+  {q:12,scale:'avo', rev:true,  text:'我通常会跟伴侣讨论我的问题和烦恼 [R]'},
+  {q:13,scale:'ras', rev:false, text:'伴侣在多大程度上满足你对亲密关系的需求'},
+  {q:14,scale:'avo', rev:false, text:'我不习惯向伴侣敞开心扉'},
+  {q:15,scale:'anx', rev:false, text:'我害怕伴侣会抛弃我'},
+  {q:16,scale:'dts', rev:false, text:'我的伴侣对我是真诚的'},
+  {q:17,scale:'uls', rev:false, text:'我感到被冷落'},
+  {q:18,scale:'avo', rev:true,  text:'我会跟伴侣商量事情 [R]'},
+  {q:19,scale:'pprs',rev:false, text:'我的伴侣能看到"真正的"我'},
+  {q:20,scale:'ras', rev:false, text:'总体而言，我对我们的恋爱关系感到满意'},
+  {q:21,scale:'anx', rev:false, text:'我担心伴侣不像我在乎他那样在乎我'},
+  {q:22,scale:'dts', rev:false, text:'我的伴侣承诺认真对待我们的关系'},
+  {q:23,scale:'uls', rev:true,  text:'我有人可以倾诉心事 [R]'},
+  {q:24,scale:'avo', rev:true,  text:'我觉得很容易依赖伴侣 [R]'},
+  {q:25,scale:'pprs',rev:false, text:'我的伴侣会及时回应我的需求'},
+  {q:26,scale:'avo', rev:false, text:'我不愿意让伴侣看到我内心深处的感受'},
+  {q:27,scale:'dts', rev:false, text:'我可以依靠伴侣公平对待我'},
+  {q:28,scale:'uls', rev:false, text:'我感到孤独'},
+  {q:29,scale:'ras', rev:false, text:'与其他人的恋爱关系相比，我们的关系更好'},
+  {q:30,scale:'dts', rev:false, text:'我的伴侣是诚实的'},
+  {q:31,scale:'ras', rev:false, text:'你对伴侣的爱有多深'},
+];
+
+// ===== SCORING ENGINE =====
+function score(answers){
+  // answers: {1:'A',2:'A',...,6:'5',7:'5',...}
+  const raw = {pprs:[],dts:[],ras:[],anx:[],avo:[],uls:[]};
+  const itemView = []; // per-item for detail tab
+
+  for(const item of scaleItems){
+    let v = parseInt(answers[item.q]) || 3;
+    let scored = v;
+    if(item.rev) scored = 6 - v; // 5-point: 6-x
+    raw[item.scale].push(scored);
+    itemView.push({
+      q:item.q, text:item.text, scale:item.scale,
+      raw:v, rev:item.rev, scored:scored
+    });
+  }
+
+  // Compute composite means
+  const mean = s => raw[s].reduce((a,b)=>a+b,0) / raw[s].length;
+  return {
+    pprs:mean('pprs'), dts:mean('dts'), ras:mean('ras'),
+    anx:mean('anx'), avo:mean('avo'), uls:mean('uls'),
+    itemView,
+    rawScores:raw
+  };
+}
+
+function classify(scores){
+  const anx=scores.anx, avo=scores.avo;
+  const zAnx = (anx - studyNorms.anx.m) / studyNorms.anx.sd;
+  const zAvo = (avo - studyNorms.avo.m) / studyNorms.avo.sd;
+  const pAnx = normCDF(zAnx)*100;
+  const pAvo = normCDF(zAvo)*100;
+
+  // Method 1: midpoint (>3.0 on 5pt → high)
+  const m1anx = anx>3.0?'H':'L', m1avo = avo>3.0?'H':'L';
+  let type1='';
+  if(m1anx==='L'&&m1avo==='L') type1='安全型';
+  else if(m1anx==='H'&&m1avo==='L') type1='焦虑型（迷恋型）';
+  else if(m1anx==='L'&&m1avo==='H') type1='回避型（疏离型）';
+  else type1='恐惧型';
+
+  // Method 2: percentile (>75%ile → high, <25%ile → low)
+  const p2anx = pAnx>75?'H':(pAnx<25?'L':'M');
+  const p2avo = pAvo>75?'H':(pAvo<25?'L':'M');
+  let type2='';
+  if(p2anx==='L'&&p2avo==='L') type2='安全型';
+  else if(p2anx==='H'&&p2avo==='L') type2='焦虑型（迷恋型）';
+  else if(p2anx==='L'&&p2avo==='H') type2='回避型（疏离型）';
+  else if(p2anx==='H'&&p2avo==='H') type2='恐惧型';
+  else if(p2anx==='M'&&p2avo==='L') type2='焦虑倾向';
+  else if(p2anx==='L'&&p2avo==='M') type2='回避倾向';
+  else if(p2anx==='H'&&p2avo==='M') type2='焦虑主导（回避中等）';
+  else if(p2anx==='M'&&p2avo==='H') type2='回避主导（焦虑中等）';
+  else type2='中间型';
+
+  return {anx, avo, zAnx, zAvo, pAnx, pAvo, type1, type2, m1anx, m1avo, p2anx, p2avo};
+}
+
+function normCDF(z){
+  // Approximation of standard normal CDF
+  const a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;
+  const sign=z<0?-1:1;
+  const x=Math.abs(z)/Math.sqrt(2);
+  const t=1/(1+p*x);
+  const y=1-(((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);
+  return 0.5*(1+sign*y);
+}
+
+// ===== UI =====
+document.addEventListener('DOMContentLoaded',()=>{
+  const answers = {};
+
+  // Click handlers
+  document.querySelectorAll('.opt').forEach(opt=>{
+    opt.addEventListener('click',()=>{
+      const q=opt.dataset.q;
+      const v=opt.dataset.v;
+      answers[q]=v;
+      // Highlight selection
+      opt.parentElement.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+      opt.classList.add('sel');
+      checkComplete();
+    });
+  });
+
+  function checkComplete(){
+    const all=document.querySelectorAll('.opt.sel').length;
+    const needed=31;
+    document.getElementById('submitBtn').disabled = all < needed;
+  }
+
+  // Inject remaining scale items
+  const part2 = document.getElementById('part2');
+  let qhtml='';
+  for(const item of scaleItems){
+    const rstext = item.rev ? ' <span style="color:var(--orange);font-size:11px">[R]</span>' : '';
+    const sclabel = `<span style="color:var(--muted);font-size:10px;margin-left:6px">[${item.scale.toUpperCase()}]</span>`;
+    qhtml+=`<div class="question"><div class="q-text">${item.q}. ${item.text}${rstext}${sclabel}</div>`;
+    qhtml+=`<div class="options">`;
+    for(let i=1;i<=5;i++){
+      qhtml+=`<div class="opt" data-q="${item.q}" data-v="${i}">${i}<br><span style="font-size:9px">${['','很不同意','不同意','一般','同意','很同意'][i]}</span></div>`;
+    }
+    qhtml+=`</div></div>`;
+  }
+  part2.innerHTML += qhtml;
+
+  // Submit button
+  const submitDiv = document.createElement('div');
+  submitDiv.className='card';
+  submitDiv.innerHTML=`<button class="btn" id="submitBtn" disabled>生 成 分 析 报 告</button>`;
+  document.getElementById('testSection').appendChild(submitDiv);
+
+  // Re-attach listeners
+  document.querySelectorAll('.opt').forEach(opt=>{
+    opt.addEventListener('click',()=>{
+      const q=opt.dataset.q;
+      const v=opt.dataset.v;
+      answers[q]=v;
+      opt.parentElement.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+      opt.classList.add('sel');
+      checkComplete();
+    });
+  });
+
+  document.getElementById('submitBtn').addEventListener('click',()=>{
+    document.getElementById('testSection').style.display='none';
+    document.getElementById('resultSection').classList.add('show');
+    document.getElementById('resultDate').textContent = new Date().toLocaleString('zh-CN');
+    showResults(answers);
+  });
+
+  function showResults(answers){
+    const s = score(answers);
+    const c = classify(s);
+
+    // ---- Metrics Grid ----
+    const metrics = [
+      {name:'依恋焦虑',val:s.anx,unit:'/5',norm:studyNorms.anx,hi:true,color:'var(--red)'},
+      {name:'依恋回避',val:s.avo,unit:'/5',norm:studyNorms.avo,hi:true,color:'var(--blue)'},
+      {name:'感知伴侣回应性',val:s.pprs,unit:'/5',norm:studyNorms.pprs,hi:false,color:'var(--green)'},
+      {name:'信任',val:s.dts,unit:'/5',norm:studyNorms.dts,hi:false,color:'var(--green)'},
+      {name:'关系满意度',val:s.ras,unit:'/5',norm:studyNorms.ras,hi:false,color:'var(--yel)'},
+      {name:'孤独感',val:s.uls,unit:'/5',norm:studyNorms.uls,hi:true,color:'var(--orange)'},
+    ];
+    let mg = '';
+    for(const m of metrics){
+      const z=(m.val-m.norm.m)/m.norm.sd;
+      const pct=Math.round(normCDF(z)*100);
+      const barPct=Math.max(5,Math.min(95,pct));
+      const barColor=m.hi?(z>0?m.color:'var(--green)'):(z>0?'var(--green)':'var(--red)');
+      const level=z>1?'显著高于':(z<-1?'显著低于':(Math.abs(z)<0.3?'接近':'略'));
+      mg+=`<div class="metric">
+        <div class="label">${m.name}</div>
+        <div class="value" style="color:${barColor}">${m.val.toFixed(2)}</div>
+        <div class="pg-bar"><div class="pg-fill" style="width:${barPct}%;background:${barColor}"></div></div>
+        <div class="norm">${level}常模 (${m.norm.m.toFixed(2)}±${m.norm.sd.toFixed(2)}) · 高于 ${pct}% 的人</div>
+      </div>`;
+    }
+    document.getElementById('metricsGrid').innerHTML = mg;
+
+    // ---- Classification ----
+    const typeColor = c.type2.includes('焦虑')||c.type2.includes('恐惧')?'var(--red)':'var(--green)';
+    document.getElementById('classificationResult').innerHTML = `
+      <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-bottom:16px">
+        <div style="font-size:20px">你的焦虑得分：<span class="danger">${s.anx.toFixed(2)}</span>（高于 ${Math.round(c.pAnx)}% 的人）</div>
+        <div style="font-size:20px">你的回避得分：<span style="color:var(--blue);font-weight:700">${s.avo.toFixed(2)}</span>（高于 ${Math.round(c.pAvo)}% 的人）</div>
+      </div>
+      <div style="margin:16px 0">
+        <span class="badge" style="font-size:18px;background:${typeColor==='var(--red)'?'#4a1a1a':'#1a3a2a'};color:${typeColor}">${c.type2}</span>
+        <span class="badge" style="font-size:14px;background:#2a2a2a;color:var(--muted)">中点法判定：${c.type1}</span>
+      </div>
+      <p style="font-size:13px;color:var(--muted)">中点法（>3.0=高）：焦虑${c.m1anx==='H'?'高':'低'}，回避${c.m1avo==='H'?'高':'低'} → ${c.type1}<br>
+      百分位法（>75%ile=高，25-75%ile=中，<25%ile=低）：焦虑${c.p2anx==='H'?'高':(c.p2anx==='M'?'中':'低')}，回避${c.p2avo==='H'?'高':(c.p2avo==='M'?'中':'低')} → ${c.type2}</p>
+    `;
+
+    // ---- Quadrant Canvas ----
+    drawQuadrant(s.anx, s.avo, c.zAnx, c.zAvo);
+
+    // ---- Tab: Depth Analysis ----
+    const anxItems=s.itemView.filter(i=>i.scale==='anx');
+    const avoItems=s.itemView.filter(i=>i.scale==='avo');
+    const maxAnxItems=anxItems.filter(i=>i.raw>=5);
+    const maxAvoItems=avoItems.filter(i=>i.scored>=4.5);
+
+    let depth=`
+    <h3>焦虑维度：${s.anx>=4.5?'处于极高水平 ⚠️':(s.anx>=3.8?'处于较高水平':'处于适中水平')}</h3>
+    <p>依恋焦虑反映的是"对关系失去和被抛弃的恐惧程度"。得分越高，在关系中越容易感到不安，越倾向于频繁确认对方的感情。</p>`;
+    if(s.anx>=4){
+      depth+=`<div class="signal"><strong>⚠ 高焦虑信号：</strong>你的焦虑得分${s.anx>=4.5?'非常':''}高。研究显示，当焦虑水平超过 +1SD 时，伴侣的关心和回应很难被内心消化为安全感（Mikulincer & Shaver, 2007）。你可能会频繁检查消息、过度解读对方的语气、在对方没有即时回复时产生强烈的被抛弃感。</div>`;
+    }
+    if(maxAnxItems.length>0){
+      depth+=`<p>满分题：${maxAnxItems.map(i=>`第${i.q}题`).join('、')}<br><span style="font-size:12px;color:var(--muted)">这些题全部选了"完全符合"，说明对关系威胁的警觉处于天花板水平。</span></p>`;
+    }
+    depth+=`<h3>回避维度：${s.avo>=4?'处于较高水平':(s.avo>=3.2?'处于中等偏高':'处于适中水平')}</h3>
+    <p>依恋回避反映的是"对亲密和依赖的不适程度"。得分越高，越倾向于保持情感距离、避免深度自我表露。</p>`;
+    if(s.avo>=3 && s.avo<4.5){
+      depth+=`<div class="warn"><strong>⚡ 选择性回避：</strong>你的回避不是全局性的。从逐题数据看，你在"依赖"相关的题目上得分${s.itemView.filter(i=>i.scale==='avo'&&[24].includes(i.q))[0]?.scored}分（愿意依赖），但在"袒露内心"相关题目上回避更明显。这是恐惧型的典型特征——"渴望靠近但害怕透明"。</div>`;
+    }
+    if(s.uls>=3.5){
+      depth+=`<div class="signal"><strong>孤独感偏高：</strong>你的孤独感得分为 ${s.uls.toFixed(2)}，在大学生中处于中上水平。在埃里克森"亲密对孤独"的发展框架中，这说明你在建立深层亲密关系方面可能遇到了障碍。</div>`;
+    }
+    document.getElementById('tab-depth').innerHTML=depth;
+
+    // ---- Tab: Model ----
+    const anxGap = s.pprs - s.dts;
+    const dtsGap = s.dts - s.ras;
+    const effPred = 0.60 + 0.50*(-c.zAnx) + 0.55*(-c.zAvo);
+    const effDesc = effPred > 1.0 ? '高效（安全型模式）' : (effPred > 0.3 ? '中等效率' : (effPred > 0 ? '低效（焦虑/回避截流）' : '可能反转（回避主导）'));
+
+    document.getElementById('tab-model').innerHTML = `
+    <h3>调节中介模型预测</h3>
+    <p>根据我们 150 人调查的回归模型（PPRS×Anx β=-0.48, PPRS×Avo β=-0.34），输入你的得分进行模拟：</p>
+    <div class="grid2">
+      <div class="metric"><div class="label">关心→信任转化效率</div><div class="value" style="color:${effPred>0.5?'var(--green)':'var(--orange)'}">${effPred.toFixed(2)}</div><div class="norm">${effDesc}</div></div>
+      <div class="metric"><div class="label">PPRS→DTS 损耗</div><div class="value" style="color:${anxGap>0.5?'var(--red)':'var(--green)'}">${anxGap.toFixed(2)} 分</div><div class="norm">安全型通常 ≤0.2 分</div></div>
+      <div class="metric"><div class="label">DTS→RAS 损耗</div><div class="value" style="color:var(--yel)">${dtsGap.toFixed(2)} 分</div><div class="norm">信任到满意的衰减</div></div>
+      <div class="metric"><div class="label">回应悖论风险</div><div class="value" style="color:${s.anx>4&&anxGap>0.3?'var(--red)':'var(--green)'}">${s.anx>4&&anxGap>0.3?'⚠ 高风险':'较低'}</div><div class="norm">焦虑≥4 + 损耗≥0.3</div></div>
+    </div>
+    <p style="margin-top:16px;font-size:13px">你感受到的关心（PPRS）每上升 1 分，经过焦虑截流后，实际转化为信任的效率大约是安全型人的 ${Math.round(effPred/1.25*100)}%。换句话说，<span class="highlight">同样多的关心，安全型的人能从中获得的安全感大约是你的 ${(1.25/Math.max(0.01,effPred)).toFixed(1)} 倍</span>。</p>
+    `;
+
+    // ---- Tab: Items ----
+    let itemTable = '<table class="small-table"><tr><th>题号</th><th>题目</th><th>量表</th><th>原始分</th><th>反转?</th><th>计分</th><th>标记</th></tr>';
+    for(const it of s.itemView){
+      let marks=[];
+      if(it.raw>=5 && !it.rev) marks.push('<span class="flag r">满分</span>');
+      if(it.raw<=1 && it.rev) marks.push('<span class="flag r">极端</span>');
+      if(it.raw>=5 && it.rev) marks.push('<span class="flag y">反转矛盾</span>');
+      if(it.scored>=4.5 && it.scale==='avo') marks.push('<span class="flag y">高回避</span>');
+      itemTable+=`<tr>
+        <td>Q${it.q}</td><td style="text-align:left;font-size:11px">${it.text.replace(/\[R\]/,'')}</td>
+        <td>${it.scale.toUpperCase()}</td><td>${it.raw}</td>
+        <td>${it.rev?'<span style="color:var(--orange)">√</span>':'·'}</td>
+        <td style="font-weight:700">${it.scored}</td>
+        <td>${marks.join(' ')}</td></tr>`;
+    }
+    itemTable+='</table>';
+    document.getElementById('tab-items').innerHTML=itemTable;
+
+    // ---- Tab: Advice ----
+    let advice='';
+    if(s.anx>=4){
+      advice+=`<h3>🟡 第一层：认知调整——区分"事实"和"我的解读"</h3>
+      <p>研究一致表明（Campbell et al., 2005; Mikulincer & Shaver, 2007），高依恋焦虑者的核心问题不是"不够被爱"，而是<strong>认知加工偏差</strong>——倾向于将模糊信号解读为拒绝信号。<br><br>
+      <strong>练习：</strong>每当产生"他是不是不在乎我了"的想法时，写出三列：<br>
+      ① 客观事实（他做了什么/没做什么）<br>
+      ② 我的解读（我如何理解这件事）<br>
+      ③ 其他可能的解读（还有哪些中性的解释）<br>
+      坚持两周，你会发现大多数"被拒绝"的感受来源于自己的解读习惯，而非对方的行为。</p>`;
+    }
+    if(s.avo>=3){
+      advice+=`<h3>🔵 第二层：行为调整——低风险自我表露练习</h3>
+      <p>你的回避主要集中在"袒露内心"而非"依赖他人"。这说明你愿意靠近，但害怕透明。<br><br>
+      <strong>练习：</strong>每周选择一件<strong>小事情</strong>告诉伴侣——不是重大情感问题，而是"今天我因为XX事有点烦"这种级别的。设定预期：<strong>不求对方完美回应</strong>，只练习"说出来"这个动作本身。Reis 等（2011）的回应性研究指出，关系的安全感不来自于每一次完美的回应，而来自于<strong>持续、低风险的自我表露积累</strong>。</p>`;
+    }
+    if(s.anx>=4 && s.avo>=3){
+      advice+=`<h3>🔴 第三层：恐惧型专项——打破"渴望+恐惧"的推拉循环</h3>
+      <p>这是最难处理的依恋模式：你对亲密的渴望（高焦虑）和对透明的恐惧（高回避）同时存在，导致一种典型的推拉行为——靠近后又推开。<br><br>
+      <strong>关键策略：</strong></p>
+      <ul style="padding-left:18px;font-size:13px">
+        <li>识别"推拉时刻"：记录自己在关系中的情绪波动周期。通常的模式是：不安→过度联络→获得安心→退回距离→再次不安</li>
+        <li>延迟回应：感到焦虑想发消息时，等 10 分钟。这 10 分钟用来区分"我真的需要对方"和"我只是需要缓解焦虑"</li>
+        <li>告知对方你的模式：对伴侣说"我有的时候需要一点空间，不是因为不在乎你，是因为我正在学习如何不害怕"。让对方知道规则，比让对方猜测规则要好</li>
+        <li>专注自我同一性：根据埃里克森理论，大学生首先要完成"我是谁"的任务，才能健康地进入亲密关系。花时间发展自己的兴趣和能力，不要把全部存在感放在恋爱关系中</li>
+      </ul>`;
+    }
+    if(s.anx<3.5 && s.avo<3.5){
+      advice+=`<h3>🟢 安全型维护建议</h3><p>你的依恋模式整体健康。保持以下几点即可：持续的低风险自我表露；在伴侣表现出不安时给予稳定的回应；定期反思关系中的沟通质量。</p>`;
+    }
+    document.getElementById('tab-advice').innerHTML=advice;
+
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(t=>{
+      t.addEventListener('click',()=>{
+        document.querySelectorAll('.tab').forEach(x=>x.classList.remove('act'));
+        t.classList.add('act');
+        document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('act'));
+        document.getElementById(t.dataset.tab).classList.add('act');
+      });
+    });
+  }
+
+  function drawQuadrant(anx, avo, zAnx, zAvo){
+    const canvas = document.getElementById('quadrant');
+    const ctx = canvas.getContext('2d');
+    const w=460,h=460,margin=50;
+    const plotW=w-2*margin,plotH=h-2*margin;
+
+    ctx.clearRect(0,0,w,h);
+    ctx.fillStyle='#1a1d27';
+    ctx.fillRect(0,0,w,h);
+
+    // Axes
+    const x0=margin,y0=h-margin;
+    ctx.strokeStyle='#444';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(margin,margin);ctx.lineTo(margin,y0);ctx.lineTo(w-margin,y0);ctx.stroke();
+
+    // Quadrant shading
+    const cx=margin+plotW/2,cy=margin+plotH/2;
+    ctx.fillStyle='rgba(76,175,132,0.08)';ctx.fillRect(margin,margin,cx-margin,cy-margin); // Secure LL
+    ctx.fillStyle='rgba(232,125,62,0.08)';ctx.fillRect(cx,margin,w-margin-cx,cy-margin); // Anxious HL
+    ctx.fillStyle='rgba(74,144,217,0.08)';ctx.fillRect(margin,cy,cx-margin,y0-cy); // Avoidant LH
+    ctx.fillStyle='rgba(224,81,81,0.08)';ctx.fillRect(cx,cy,w-margin-cx,y0-cy); // Fearful HH
+
+    // Labels
+    ctx.fillStyle='#666';ctx.font='12px sans-serif';ctx.textAlign='center';
+    ctx.fillText('回避 →',w/2,h-10);
+    ctx.save();ctx.translate(18,h/2);ctx.rotate(-Math.PI/2);
+    ctx.fillText('焦虑 →',0,0);ctx.restore();
+    ctx.fillStyle='var(--green)';ctx.fillText('安全型',margin+40,cy+20);
+    ctx.fillStyle='var(--orange)';ctx.fillText('焦虑型',cx+40,cy-10);
+    ctx.fillStyle='var(--blue)';ctx.fillText('回避型',margin+40,cy-10);
+    ctx.fillStyle='var(--red)';ctx.fillText('恐惧型',cx+40,cy+20);
+
+    // Cutoff lines (midpoint: 3.0)
+    const axCut = margin + plotW * (3.0-1)/4;
+    const ayCut = y0 - plotH * (3.0-1)/4;
+    ctx.strokeStyle='#555';ctx.lineWidth=1;ctx.setLineDash([5,5]);
+    ctx.beginPath();ctx.moveTo(axCut,margin);ctx.lineTo(axCut,y0);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(margin,ayCut);ctx.lineTo(w-margin,ayCut);ctx.stroke();
+    ctx.setLineDash([]);
+
+    // User point
+    const ux = margin + plotW * (Math.min(5,Math.max(1,avo))-1)/4;
+    const uy = y0 - plotH * (Math.min(5,Math.max(1,anx))-1)/4;
+    ctx.beginPath();ctx.arc(ux,uy,7,0,Math.PI*2);
+    ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+
+    // Glow
+    ctx.beginPath();ctx.arc(ux,uy,14,0,Math.PI*2);
+    ctx.fillStyle='rgba(255,255,255,0.15)';ctx.fill();
+
+    // Score text
+    ctx.fillStyle='#fff';ctx.font='bold 13px sans-serif';ctx.textAlign='left';
+    ctx.fillText(`(${avo.toFixed(2)}, ${anx.toFixed(2)})`,ux+12,uy-12);
+    ctx.fillStyle='#888';ctx.font='10px sans-serif';
+    ctx.fillText(`z: anx +${zAnx.toFixed(2)}SD, avo ${zAvo>=0?'+':''}${zAvo.toFixed(2)}SD`,ux+12,uy+4);
+  }
+});
+</script>
+</body>
+</html>
