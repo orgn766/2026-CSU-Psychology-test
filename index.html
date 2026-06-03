@@ -539,23 +539,24 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 });
 
-  // ---- Auto QR Code ----
-  (function(){
+  // ---- Auto QR Code (runs after DOM ready) ----
+  document.addEventListener('DOMContentLoaded',function(){
     const url = window.location.href;
-    const qrImg = document.getElementById('qrCode');
-    if(qrImg && url && !url.startsWith('file://')){
-      qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(url);
-      document.getElementById('qrSection').style.display = 'block';
+    const section = document.getElementById('qrSection');
+    const target = document.getElementById('qrTarget');
+    if(section && target && url && !url.startsWith('file://')){
+      target.innerHTML = '<img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&color=88aacc&data='+encodeURIComponent(url)+'" style="width:100px;height:100px;border-radius:6px" alt="QR" onerror="this.parentElement.parentElement.style.display=\'none\'">';
+      section.style.display = 'flex';
     }
-  })();
+  });
 </script>
 
-<div id="qrSection" style="display:none;position:fixed;top:20px;right:20px;z-index:999;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px;align-items:center;gap:14px;box-shadow:0 4px 24px rgba(0,0,0,.5);max-width:300px">
-  <div id="qrTarget" style="flex-shrink:0"></div>
-  <div style="min-width:100px">
-    <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px">分享此测试</div>
+<div id="qrSection" style="display:none;position:fixed;top:20px;right:20px;z-index:999;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;box-shadow:0 4px 24px rgba(0,0,0,.5);max-width:280px">
+  <div id="qrTarget" style="flex-shrink:0;margin-right:12px"></div>
+  <div style="min-width:90px">
+    <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:3px">分享此测试</div>
     <div style="font-size:11px;color:var(--muted)">扫码即可打开</div>
-    <div style="font-size:10px;color:var(--muted);margin-top:4px">数据仅本地处理</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:3px">数据仅本地处理</div>
   </div>
 </div>
 
