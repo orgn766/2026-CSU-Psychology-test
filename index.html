@@ -538,6 +538,25 @@ document.addEventListener('DOMContentLoaded',()=>{
     ctx.fillText(`z: anx +${zAnx.toFixed(2)}SD, avo ${zAvo>=0?'+':''}${zAvo.toFixed(2)}SD`,ux+12,uy+4);
   }
 });
+
+  // ---- Auto QR Code ----
+  (function(){
+    const url = window.location.href;
+    const qrImg = document.getElementById('qrCode');
+    if(qrImg && url && !url.startsWith('file://')){
+      qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(url);
+      document.getElementById('qrSection').style.display = 'block';
+    }
+  })();
 </script>
+
+<div id="qrSection" style="display:none;text-align:center;margin:24px 0">
+  <div class="card">
+    <h2>分享此测试</h2>
+    <img id="qrCode" src="" alt="QR Code" style="width:180px;height:180px;border-radius:8px;margin:12px 0">
+    <p class="sub" style="margin-top:8px">扫描二维码即可打开此测试 · 数据仅本地处理，不上传服务器</p>
+  </div>
+</div>
+
 </body>
 </html>
