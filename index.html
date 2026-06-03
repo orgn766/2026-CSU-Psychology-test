@@ -550,11 +550,12 @@ document.addEventListener('DOMContentLoaded',()=>{
   })();
 </script>
 
-<div id="qrSection" style="display:none;text-align:center;margin:24px 0">
-  <div class="card">
-    <h2>分享此测试</h2>
-    <img id="qrCode" src="" alt="QR Code" style="width:180px;height:180px;border-radius:8px;margin:12px 0">
-    <p class="sub" style="margin-top:8px">扫描二维码即可打开此测试 · 数据仅本地处理，不上传服务器</p>
+<div id="qrSection" style="display:none;position:fixed;top:20px;right:20px;z-index:999;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px;align-items:center;gap:14px;box-shadow:0 4px 24px rgba(0,0,0,.5);max-width:300px">
+  <div id="qrTarget" style="flex-shrink:0"></div>
+  <div style="min-width:100px">
+    <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px">分享此测试</div>
+    <div style="font-size:11px;color:var(--muted)">扫码即可打开</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:4px">数据仅本地处理</div>
   </div>
 </div>
 
